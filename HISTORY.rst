@@ -1,0 +1,9 @@
+.. :changelog:
+
+History
+-------
+
+0.0.1 (2018-05-21)
+++++++++++++++++++
+
+* Initial proof of concept app created
