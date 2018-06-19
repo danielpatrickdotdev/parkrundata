@@ -19,7 +19,7 @@ class TestCountry(TestCase):
         pass
 
     def test_create_and_retrieve_country(self):
-        country = models.Country(name="UK")
+        country = models.Country(name="UK", url="www.parkrun.org.uk")
         country.save()
 
         c = models.Country.objects.get()
@@ -32,13 +32,14 @@ class TestCountry(TestCase):
 class TestEvent(TestCase):
 
     def setUp(self):
-        self.country = models.Country(name="UK")
+        self.country = models.Country(name="UK", url="www.parkrun.org.uk")
         self.country.save()
 
     def test_create_and_retrieve_event(self):
         event = models.Event(
             country=self.country,
             name="Atownsomewhere",
+            slug="atownsomewhere",
             latitude=0,
             longitude=0,
         )
