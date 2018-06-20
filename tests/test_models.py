@@ -24,6 +24,7 @@ class TestCountry(TestCase):
 
         c = models.Country.objects.get()
         self.assertEqual(c.name, "UK")
+        self.assertEqual(c.url, "www.parkrun.org.uk")
 
     def tearDown(self):
         pass
@@ -48,6 +49,7 @@ class TestEvent(TestCase):
         e = models.Event.objects.get()
         self.assertEqual(e.country.name, "UK")
         self.assertEqual(e.name, "Atownsomewhere")
+        self.assertEqual(e.slug, "atownsomewhere")
         self.assertEqual(e.latitude, 0)
         self.assertEqual(e.longitude, 0)
 
