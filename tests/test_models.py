@@ -8,6 +8,8 @@ test_parkrundata
 Tests for `parkrundata` models module.
 """
 
+from decimal import Decimal
+
 from django.test import TestCase
 
 from parkrundata import models
@@ -52,6 +54,60 @@ class TestEvent(TestCase):
         self.assertEqual(e.slug, "atownsomewhere")
         self.assertEqual(e.latitude, 0)
         self.assertEqual(e.longitude, 0)
+
+    def test_invalid_coordinates(self):
+        # Here we check that we can only save objects that have:
+        # a) latitude between -99.999999 and 99.999999
+        # b) longitude between -999.999999 and 999.999999
+        # c) longitude and latitude with precision no greater than 6 decimals
+        # More specific validation goes elsewhere (eg form/serializer)
+
+        coords = [
+            ("-100", "0"),
+            ("-0.0000001", "0"),
+            ("0.0000001", "0"),
+            ("100", "0"),
+            ("0", "-1000"),
+            ("0", "-0.0000001"),
+            ("0", "0.0000001"),
+            ("0", "1000")
+        ]
+
+        for latitude, longitude in coords:
+            event = models.Event(
+                country=self.country,
+                name="Atownsomewhere",
+                slug="atownsomewhere",
+                latitude=latitude,
+                longitude=longitude,
+            )
+            with self.assertRaises(Exception):
+                event.save()
+
+    def test_valid_coodinates(self):
+        coords = [
+            ("-99.999999", "0"),
+            ("-0.000001", "0"),
+            ("0.000001", "0"),
+            ("99.999999", "0"),
+            ("0", "-999.999999"),
+            ("0", "-0.000001"),
+            ("0", "0.000001"),
+            ("0", "999.999999")
+        ]
+
+        for latitude, longitude in coords:
+            event = models.Event(
+                country=self.country,
+                name="Atownsomewhere",
+                slug="atownsomewhere",
+                latitude=latitude,
+                longitude=longitude,
+            )
+            event.save()
+            event.refresh_from_db()
+            self.assertEqual(event.latitude, Decimal(latitude))
+            self.assertEqual(event.longitude, Decimal(longitude))
 
     def tearDown(self):
         pass
