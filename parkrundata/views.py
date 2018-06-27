@@ -1,30 +1,29 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    UpdateView,
-    ListView
-)
+
+from rest_framework import viewsets, generics
 
 from .models import Country, Event
+from .serializers import CountrySerializer, EventSerializer
 
 
-class CountryDetailView(DetailView):
+class EventViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
-    model = Country
+    def get_object(self):
+        """
+        Override existing generics.GenericAPIView method to allow retrieving
+        Event objects by country.name and event.name
+        """
+        queryset = self.filter_queryset(self.get_queryset())
 
+        filter_kwargs = {
+            "country__url": self.kwargs["country"],
+            "slug": self.kwargs["slug"]
+        }
+        obj = generics.get_object_or_404(queryset, **filter_kwargs)
 
-class CountryListView(ListView):
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
 
-    model = Country
-
-
-class EventDetailView(DetailView):
-
-    model = Event
-
-
-class EventListView(ListView):
-
-    model = Event
+        return obj
