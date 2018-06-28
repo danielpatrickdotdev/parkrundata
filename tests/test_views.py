@@ -8,6 +8,7 @@ test_parkrundata
 Tests for `parkrundata` views module.
 """
 
+from django.http import Http404
 from django.test import TestCase
 
 from rest_framework.test import APIRequestFactory
@@ -60,7 +61,7 @@ class TestEventViewSet(TestCase):
         factory = APIRequestFactory()
         request = factory.get("")
         view = self.setup_view(
-            request, kwargs={"country": "www.parkrun.org.uk", "slug": "bushy"})
+            request, kwargs={"url": "www.parkrun.org.uk/bushy"})
         obj = view.get_object()
 
         self.assertEqual(obj, self.bushy)
@@ -72,6 +73,15 @@ class TestEventViewSet(TestCase):
         events = view.get_queryset()
         self.assertCountEqual(events,
                               [self.bushy, self.lesdougnes, self.neckarau])
+
+    def test_invalid_url_raises_404(self):
+        factory = APIRequestFactory()
+
+        for url in ["www.parkrun.org/bushy", "www.parkrun.org"]:
+            request = factory.get("")
+            view = self.setup_view(request, kwargs={"url": url})
+            with self.assertRaises(Http404):
+                obj = view.get_object()
 
     def tearDown(self):
         pass

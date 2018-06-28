@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from django.http import Http404
+
 from rest_framework import viewsets, generics
 
 from .models import Country, Event
@@ -17,9 +19,15 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
         """
         queryset = self.filter_queryset(self.get_queryset())
 
+        url = self.kwargs["url"]
+        try:
+            country_url, slug = url.split("/")
+        except:
+            raise Http404
+
         filter_kwargs = {
-            "country__url": self.kwargs["country"],
-            "slug": self.kwargs["slug"]
+            "country__url": country_url,
+            "slug": slug
         }
         obj = generics.get_object_or_404(queryset, **filter_kwargs)
 
