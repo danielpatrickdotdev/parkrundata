@@ -50,6 +50,8 @@ class TestEventViewSet(TestCase):
             longitude = "8.453786"
         )
 
+        self.factory = APIRequestFactory()
+
     def setup_view(self, request, args=None, kwargs=None):
         view = views.EventViewSet()
         view.request = request
@@ -58,8 +60,7 @@ class TestEventViewSet(TestCase):
         return view
 
     def test_retrieve_event(self):
-        factory = APIRequestFactory()
-        request = factory.get("")
+        request = self.factory.get("")
         view = self.setup_view(
             request, kwargs={"url": "www.parkrun.org.uk/bushy"})
         obj = view.get_object()
@@ -67,18 +68,16 @@ class TestEventViewSet(TestCase):
         self.assertEqual(obj, self.bushy)
 
     def test_retrieve_event_list(self):
-        factory = APIRequestFactory()
-        request = factory.get("")
+        request = self.factory.get("")
         view = self.setup_view(request)
         events = view.get_queryset()
         self.assertCountEqual(events,
                               [self.bushy, self.lesdougnes, self.neckarau])
 
     def test_invalid_url_raises_404(self):
-        factory = APIRequestFactory()
 
         for url in ["www.parkrun.org/bushy", "www.parkrun.org"]:
-            request = factory.get("")
+            request = self.factory.get("")
             view = self.setup_view(request, kwargs={"url": url})
             with self.assertRaises(Http404):
                 obj = view.get_object()
