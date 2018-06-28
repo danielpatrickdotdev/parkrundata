@@ -11,12 +11,12 @@ Tests for `parkrundata` views module.
 from django.http import Http404
 from django.test import TestCase
 
-from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIRequestFactory, APITestCase
 
 from parkrundata import models, views
 
 
-class TestEventViewSet(TestCase):
+class TestEventViewSet(APITestCase):
 
     def setUp(self):
         self.uk = models.Country.objects.create(
@@ -65,6 +65,10 @@ class TestEventViewSet(TestCase):
         obj = view.get_object()
 
         self.assertEqual(obj, self.bushy)
+
+    def test_retrieves_event_as_json(self):
+        response = self.client.get("/events/1/")
+        self.assertEqual(response.accepted_media_type, "application/json")
 
     def test_retrieve_event_list(self):
         request = self.factory.get("")
