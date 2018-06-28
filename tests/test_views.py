@@ -61,8 +61,7 @@ class TestEventViewSet(TestCase):
 
     def test_retrieve_event(self):
         request = self.factory.get("")
-        view = self.setup_view(
-            request, kwargs={"url": "www.parkrun.org.uk/bushy"})
+        view = self.setup_view(request, kwargs={"pk": 1})
         obj = view.get_object()
 
         self.assertEqual(obj, self.bushy)
@@ -74,11 +73,11 @@ class TestEventViewSet(TestCase):
         self.assertCountEqual(events,
                               [self.bushy, self.lesdougnes, self.neckarau])
 
-    def test_invalid_url_raises_404(self):
+    def test_invalid_pk_raises_404(self):
 
-        for url in ["www.parkrun.org/bushy", "www.parkrun.org"]:
+        for pk in [0, 4]:
             request = self.factory.get("")
-            view = self.setup_view(request, kwargs={"url": url})
+            view = self.setup_view(request, kwargs={"pk": pk})
             with self.assertRaises(Http404):
                 obj = view.get_object()
 
