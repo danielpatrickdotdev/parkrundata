@@ -9,7 +9,6 @@ Tests for `parkrundata` views module.
 """
 
 from django.http import Http404
-from django.test import TestCase
 
 from rest_framework.test import APIRequestFactory, APITestCase
 
@@ -27,27 +26,27 @@ class TestEventViewSet(APITestCase):
                 name="Germany", url="www.parkrun.com.de")
 
         self.bushy = models.Event.objects.create(
-            country = self.uk,
-            name = "Bushy",
-            slug = "bushy",
-            latitude = "51.4096938",
-            longitude = "-0.3340315"
+            country=self.uk,
+            name="Bushy",
+            slug="bushy",
+            latitude="51.4096938",
+            longitude="-0.3340315"
         )
 
         self.lesdougnes = models.Event.objects.create(
-            country = self.france,
-            name = "Les Dougnes",
-            slug = "lesdougnes",
-            latitude = "45.066553",
-            longitude = "-0.429266"
+            country=self.france,
+            name="Les Dougnes",
+            slug="lesdougnes",
+            latitude="45.066553",
+            longitude="-0.429266"
         )
 
         self.neckarau = models.Event.objects.create(
-            country = self.germany,
-            name = "Neckarau",
-            slug = "neckarau",
-            latitude = "49.448549",
-            longitude = "8.453786"
+            country=self.germany,
+            name="Neckarau",
+            slug="neckarau",
+            latitude="49.448549",
+            longitude="8.453786"
         )
 
         self.factory = APIRequestFactory()
@@ -78,12 +77,11 @@ class TestEventViewSet(APITestCase):
                               [self.bushy, self.lesdougnes, self.neckarau])
 
     def test_invalid_pk_raises_404(self):
-
         for pk in [0, 4]:
             request = self.factory.get("")
             view = self.setup_view(request, kwargs={"pk": pk})
             with self.assertRaises(Http404):
-                obj = view.get_object()
+                view.get_object()
 
     def tearDown(self):
         pass
