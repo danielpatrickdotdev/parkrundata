@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import url
-from django.views.generic import TemplateView
 
-from rest_framework.routers import Route, SimpleRouter
+from rest_framework.routers import SimpleRouter
 
 from . import views
 
