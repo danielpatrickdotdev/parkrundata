@@ -67,15 +67,15 @@ class TestCountry(TestCase):
         response = self.client.get("/events/0/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_post_event_gets_405(self):
+    def test_post_event_gets_403(self):
         response = self.client.post("/events/1/", data={"name": "Bushy Park"})
         self.assertEqual(response.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
+                         status.HTTP_403_FORBIDDEN)
 
-    def test_delete_event_gets_405(self):
+    def test_delete_event_gets_403(self):
         response = self.client.delete("/events/1/")
         self.assertEqual(response.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
+                         status.HTTP_403_FORBIDDEN)
 
     def test_retrieve_event_list(self):
         response = self.client.get("/events/")
@@ -83,7 +83,7 @@ class TestCountry(TestCase):
             self.bushy_data, self.lesdougnes_data, self.neckarau_data]
         self.assertCountEqual(response.data, parkruns_data)
 
-    def test_post_to_event_list_gets_405(self):
+    def test_post_to_event_list_gets_403(self):
         response = self.client.post(
             "/events/",
             data={
@@ -95,7 +95,7 @@ class TestCountry(TestCase):
             }
         )
         self.assertEqual(response.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
+                         status.HTTP_403_FORBIDDEN)
 
     def tearDown(self):
         pass
