@@ -22,6 +22,113 @@ from parkrundata import models, views
 User = get_user_model()
 
 
+class TestCountryView(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create(username="test")
+        self.factory = APIRequestFactory()
+
+        self.uk = models.Country.objects.create(
+                name="UK", url="http://www.parkrun.org.uk")
+        self.france = models.Country.objects.create(
+                name="France", url="http://www.parkrun.fr")
+        self.germany = models.Country.objects.create(
+                name="Germany", url="http://www.parkrun.com.de")
+        self.countries = (self.uk, self.france, self.germany)
+
+    def setup_view(self, request=None, url=None, args=None, kwargs=None):
+        view = views.CountryViewSet()
+        view.request = request or self.factory.get(url or "")
+        view.args = args
+        view.kwargs = kwargs
+        return view
+
+    def test_retrieve_country(self):
+        view = self.setup_view(kwargs={"pk": 1})
+        obj = view.get_object()
+
+        self.assertEqual(obj, self.uk)
+
+    def test_retrieves_country_as_json(self):
+        response = self.client.get("/countries/1/")
+        self.assertEqual(response.accepted_media_type, "application/json")
+
+    def test_retrieve_country_list(self):
+        view = self.setup_view()
+        countries = view.get_queryset()
+        self.assertCountEqual(countries, self.countries)
+
+    def test_invalid_pk_raises_404(self):
+        for pk in [0, 4]:
+            view = self.setup_view(kwargs={"pk": pk})
+            with self.assertRaises(Http404):
+                view.get_object()
+
+    def test_cannot_create_country_unless_authenticated(self):
+        response = self.client.post("/countries/", {})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_cannot_modify_country_unless_authenticated(self):
+        response = self.client.put("/countries/1/", {"name": "United Kingdom"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_cannot_delete_country_unless_authenticated(self):
+        response = self.client.delete("/countries/1/")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_country(self):
+        self.client.force_authenticate(user=self.user)
+        new_country_data = {
+            "name": "USA",
+            "url": "http://www.parkrun.us"
+        }
+
+        response = self.client.post("/countries/", new_country_data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        new_country = models.Country.objects.get(id=4)
+        self.assertEqual(new_country.name, "USA")
+        self.assertEqual(new_country.url, "http://www.parkrun.us")
+
+    def test_modify_country(self):
+        self.client.force_authenticate(user=self.user)
+        data = {
+            "name": "United Kingdom",
+            "url": "http://www.parkrun.org.uk"
+        }
+
+        response = self.client.put("/countries/1/", data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        country = models.Country.objects.get(id=1)
+        self.assertEqual(country.name, "United Kingdom")
+        self.assertEqual(country.url, "http://www.parkrun.org.uk")
+
+    def test_partially_modify_country(self):
+        self.client.force_authenticate(user=self.user)
+        data = {
+            "name": "United Kingdom"
+        }
+
+        response = self.client.patch("/countries/1/", data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        country = models.Country.objects.get(id=1)
+        self.assertEqual(country.name, "United Kingdom")
+        self.assertEqual(country.url, "http://www.parkrun.org.uk")
+
+    def test_delete_country(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete("/countries/1/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        with self.assertRaises(models.Country.DoesNotExist):
+            models.Country.objects.get(id=1)
+
+    def tearDown(self):
+        pass
+
+
 class TestEventViewSetBase(APITestCase):
 
     def setUp(self):

@@ -8,5 +8,8 @@ from . import views
 app_name = 'parkrundata'
 
 router = SimpleRouter()
+
+router.register("countries", views.CountryViewSet)
 router.register("events", views.EventViewSet)
+
 urlpatterns = router.urls
