@@ -56,7 +56,10 @@ setup(
         'parkrundata',
     ],
     include_package_data=True,
-    install_requires=["django-model-utils>=2.0",],
+    install_requires=[
+        "django-model-utils>=2.0",
+        "djangorestframework>=3.8.2"
+    ],
     license="BSD",
     zip_safe=False,
     keywords='parkrundata',
