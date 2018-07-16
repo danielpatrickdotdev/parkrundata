@@ -26,11 +26,11 @@ class TestEventViewSetBase(APITestCase):
 
     def setUp(self):
         self.uk = models.Country.objects.create(
-                name="UK", url="www.parkrun.org.uk")
+                name="UK", url="http://www.parkrun.org.uk")
         self.france = models.Country.objects.create(
-                name="France", url="www.parkrun.fr")
+                name="France", url="http://www.parkrun.fr")
         self.germany = models.Country.objects.create(
-                name="Germany", url="www.parkrun.com.de")
+                name="Germany", url="http://www.parkrun.com.de")
 
         self.bushy = models.Event.objects.create(
             country=self.uk,
