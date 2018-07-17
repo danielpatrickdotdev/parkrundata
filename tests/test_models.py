@@ -64,6 +64,29 @@ class TestEvent(TestCase):
     def test_create_and_retrieve_event(self):
         event = models.Event(
             country=self.country,
+            name="Atownsomewhere Juniors",
+            slug="atownsomewherejuniors",
+            is_junior=True,
+            is_restricted=True,
+            is_discontinued=True,
+            latitude=0,
+            longitude=0,
+        )
+        event.save()
+
+        e = models.Event.objects.get()
+        self.assertEqual(e.country.name, "UK")
+        self.assertEqual(e.name, "Atownsomewhere Juniors")
+        self.assertEqual(e.slug, "atownsomewherejuniors")
+        self.assertTrue(e.is_junior)
+        self.assertTrue(e.is_restricted)
+        self.assertTrue(e.is_discontinued)
+        self.assertEqual(e.latitude, 0)
+        self.assertEqual(e.longitude, 0)
+
+    def test_boolean_fields_default_to_false(self):
+        event = models.Event(
+            country=self.country,
             name="Atownsomewhere",
             slug="atownsomewhere",
             latitude=0,
@@ -75,6 +98,9 @@ class TestEvent(TestCase):
         self.assertEqual(e.country.name, "UK")
         self.assertEqual(e.name, "Atownsomewhere")
         self.assertEqual(e.slug, "atownsomewhere")
+        self.assertFalse(e.is_junior)
+        self.assertFalse(e.is_restricted)
+        self.assertFalse(e.is_discontinued)
         self.assertEqual(e.latitude, 0)
         self.assertEqual(e.longitude, 0)
 
