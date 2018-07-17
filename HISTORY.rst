@@ -3,6 +3,12 @@
 History
 -------
 
+0.2.0 (2018-07-17)
+++++++++++++++++++
+
+* Added some important missing features (boolean fields on Events to
+  enable identification of junior/restricted/discontinued Events)
+
 0.1.0 (2018-07-17)
 ++++++++++++++++++
 
