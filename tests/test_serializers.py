@@ -156,9 +156,17 @@ class TestEvent(TestCase):
             ("-89.999999", "-179.999999")
         ]
 
+        # store Event data so we can generate new unique name each time we save
+        name = self.serializer_data["name"]
+        slug = self.serializer_data["slug"]
+        count = 0
+
         for latitude, longitude in values:
+            count += 1
             self.serializer_data["latitude"] = latitude
             self.serializer_data["longitude"] = longitude
+            self.serializer_data["name"] = name + str(count)
+            self.serializer_data["slug"] = slug + str(count)
             serializer = EventSerializer(data=self.serializer_data)
 
             self.assertTrue(serializer.is_valid())
