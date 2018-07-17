@@ -37,15 +37,19 @@ Add parkrundata's URL patterns:
 Features
 --------
 
-* TODO
+* Basic app for storing parkrun's events and serving via a REST API
 
 Running Tests
 -------------
 
-Does the code actually work?
+Run tests using tox
 
 ::
 
     source <YOURVIRTUALENV>/bin/activate
     (myenv) $ pip install tox
     (myenv) $ tox
+
+Or only run tests against current environment::
+
+    python runtests.py
