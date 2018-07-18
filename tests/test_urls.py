@@ -19,16 +19,18 @@ from parkrundata import models
 class TestCountryURLs(TestCase):
 
     def setUp(self):
-        self.uk = models.Country.objects.create(
-                name="UK", url="www.parkrun.org.uk")
-        self.france = models.Country.objects.create(
-                name="France", url="www.parkrun.fr")
-        self.germany = models.Country.objects.create(
-                name="Germany", url="www.parkrun.com.de")
         self.uk_data = {"name": "UK", "url": "www.parkrun.org.uk"}
         self.france_data = {"name": "France", "url": "www.parkrun.fr"}
         self.germany_data = {
             "name": "Germany", "url": "www.parkrun.com.de"}
+
+        self.uk = models.Country.objects.create(**self.uk_data)
+        self.france = models.Country.objects.create(**self.france_data)
+        self.germany = models.Country.objects.create(**self.germany_data)
+
+        self.uk_data["id"] = 1
+        self.france_data["id"] = 2
+        self.germany_data["id"] = 3
 
     def test_retrieve_country_returns_correct_object(self):
         response = self.client.get("/countries/1/", format="json")

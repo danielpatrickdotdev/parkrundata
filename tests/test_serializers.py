@@ -35,7 +35,12 @@ class TestCountrySerializer(TestCase):
     def test_contains_expected_fields(self):
         data = self.serializer.data
 
-        self.assertCountEqual(data.keys(), ["name", "url"])
+        self.assertCountEqual(data.keys(), ["id", "name", "url"])
+
+    def test_id_field_content(self):
+        data = self.serializer.data
+
+        self.assertEqual(data["id"], 1)
 
     def test_name_field_content(self):
         data = self.serializer.data

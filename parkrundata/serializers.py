@@ -7,7 +7,7 @@ from .models import Country, Event
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ["name", "url"]
+        fields = ["id", "name", "url"]
 
 
 class EventSerializer(serializers.ModelSerializer):
