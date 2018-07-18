@@ -70,6 +70,12 @@ class TestCountryURLs(TestCase):
 class TestEventURLs(TestCase):
 
     def setUp(self):
+        self.bool_defaults = {
+            "is_juniors": False,
+            "is_restricted": False,
+            "is_discontinued": False,
+        }
+
         self.uk = models.Country.objects.create(
                 name="UK", url="www.parkrun.org.uk")
         self.france = models.Country.objects.create(
@@ -86,6 +92,7 @@ class TestEventURLs(TestCase):
         }
         self.bushy = models.Event.objects.create(**self.bushy_data)
         self.bushy_data["id"] = self.bushy_data["country"] = 1
+        self.bushy_data.update(self.bool_defaults)
 
         self.lesdougnes_data = {
             "country": self.france,
@@ -96,6 +103,7 @@ class TestEventURLs(TestCase):
         }
         self.lesdougnes = models.Event.objects.create(**self.lesdougnes_data)
         self.lesdougnes_data["id"] = self.lesdougnes_data["country"] = 2
+        self.lesdougnes_data.update(self.bool_defaults)
 
         self.neckarau_data = {
             "country": self.germany,
@@ -106,6 +114,7 @@ class TestEventURLs(TestCase):
         }
         self.neckarau = models.Event.objects.create(**self.neckarau_data)
         self.neckarau_data["id"] = self.neckarau_data["country"] = 3
+        self.neckarau_data.update(self.bool_defaults)
 
         self.client = APIClient()
 

@@ -78,7 +78,8 @@ class TestEventSerializer(TestCase):
             "name": "Somecity Somepark",
             "slug": "somecitysomepark",
             "latitude": "1.234567",
-            "longitude": "3.141592"
+            "longitude": "3.141592",
+            "is_discontinued": True,
         }
 
         self.serializer_data = {
@@ -101,6 +102,7 @@ class TestEventSerializer(TestCase):
             data.keys(),
             [
                 "id", "country", "name", "slug",
+                "is_juniors", "is_restricted", "is_discontinued",
                 "latitude", "longitude"
             ]
         )
@@ -119,6 +121,21 @@ class TestEventSerializer(TestCase):
         data = self.serializer.data
 
         self.assertEqual(data["name"], self.event_data["name"])
+
+    def test_is_juniors_field_content(self):
+        data = self.serializer.data
+
+        self.assertEqual(data["is_juniors"], False)
+
+    def test_is_restricted_field_content(self):
+        data = self.serializer.data
+
+        self.assertEqual(data["is_restricted"], False)
+
+    def test_is_discontinued_field_content(self):
+        data = self.serializer.data
+
+        self.assertEqual(data["is_discontinued"], True)
 
     def test_slug_field_content(self):
         data = self.serializer.data
