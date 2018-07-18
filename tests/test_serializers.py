@@ -92,12 +92,23 @@ class TestEventSerializer(TestCase):
         self.event = Event.objects.create(**self.event_data)
         self.serializer = EventSerializer(instance=self.event)
 
+        self.event_data["id"] = 1
+
     def test_contains_expected_fields(self):
         data = self.serializer.data
 
         self.assertCountEqual(
-            data.keys(), ["country", "name", "slug", "latitude", "longitude"]
+            data.keys(),
+            [
+                "id", "country", "name", "slug",
+                "latitude", "longitude"
+            ]
         )
+
+    def test_id_field_content(self):
+        data = self.serializer.data
+
+        self.assertEqual(data["id"], 1)
 
     def test_country_field_content(self):
         data = self.serializer.data

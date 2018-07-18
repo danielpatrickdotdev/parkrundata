@@ -85,7 +85,7 @@ class TestEventURLs(TestCase):
             "longitude": "-0.334032"
         }
         self.bushy = models.Event.objects.create(**self.bushy_data)
-        self.bushy_data["country"] = 1
+        self.bushy_data["id"] = self.bushy_data["country"] = 1
 
         self.lesdougnes_data = {
             "country": self.france,
@@ -95,7 +95,7 @@ class TestEventURLs(TestCase):
             "longitude": "-0.429266"
         }
         self.lesdougnes = models.Event.objects.create(**self.lesdougnes_data)
-        self.lesdougnes_data["country"] = 2
+        self.lesdougnes_data["id"] = self.lesdougnes_data["country"] = 2
 
         self.neckarau_data = {
             "country": self.germany,
@@ -105,7 +105,7 @@ class TestEventURLs(TestCase):
             "longitude": "8.453786"
         }
         self.neckarau = models.Event.objects.create(**self.neckarau_data)
-        self.neckarau_data["country"] = 3
+        self.neckarau_data["id"] = self.neckarau_data["country"] = 3
 
         self.client = APIClient()
 

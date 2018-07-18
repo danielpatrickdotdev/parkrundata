@@ -18,4 +18,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ["country", "name", "slug", "latitude", "longitude"]
+        fields = [
+            "id", "country", "name", "slug",
+            "latitude", "longitude"
+        ]
