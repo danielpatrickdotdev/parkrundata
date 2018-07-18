@@ -3,6 +3,13 @@
 History
 -------
 
+0.3.0 (2018-07-18)
+++++++++++++++++++
+
+* Actually remembered to ensure new boolean fields are serialized so
+  they're served by API
+* Added ID field to CountrySerializer and EventSerializer
+
 0.2.0 (2018-07-17)
 ++++++++++++++++++
 
