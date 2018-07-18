@@ -66,7 +66,7 @@ class TestEvent(TestCase):
             country=self.country,
             name="Atownsomewhere Juniors",
             slug="atownsomewherejuniors",
-            is_junior=True,
+            is_juniors=True,
             is_restricted=True,
             is_discontinued=True,
             latitude=0,
@@ -78,7 +78,7 @@ class TestEvent(TestCase):
         self.assertEqual(e.country.name, "UK")
         self.assertEqual(e.name, "Atownsomewhere Juniors")
         self.assertEqual(e.slug, "atownsomewherejuniors")
-        self.assertTrue(e.is_junior)
+        self.assertTrue(e.is_juniors)
         self.assertTrue(e.is_restricted)
         self.assertTrue(e.is_discontinued)
         self.assertEqual(e.latitude, 0)
@@ -98,7 +98,7 @@ class TestEvent(TestCase):
         self.assertEqual(e.country.name, "UK")
         self.assertEqual(e.name, "Atownsomewhere")
         self.assertEqual(e.slug, "atownsomewhere")
-        self.assertFalse(e.is_junior)
+        self.assertFalse(e.is_juniors)
         self.assertFalse(e.is_restricted)
         self.assertFalse(e.is_discontinued)
         self.assertEqual(e.latitude, 0)

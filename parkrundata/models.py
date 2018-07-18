@@ -14,7 +14,7 @@ class Event(TimeStampedModel):
     country = models.ForeignKey(Country, on_delete=models.PROTECT)
     name = models.CharField(max_length=256)
     slug = models.CharField(max_length=256)
-    is_junior = models.BooleanField(default=False)
+    is_juniors = models.BooleanField(default=False)
     is_restricted = models.BooleanField(default=False)
     is_discontinued = models.BooleanField(default=False)
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
