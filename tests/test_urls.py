@@ -16,7 +16,56 @@ from rest_framework.test import APIClient
 from parkrundata import models
 
 
-class TestCountry(TestCase):
+class TestCountryURLs(TestCase):
+
+    def setUp(self):
+        self.uk = models.Country.objects.create(
+                name="UK", url="www.parkrun.org.uk")
+        self.france = models.Country.objects.create(
+                name="France", url="www.parkrun.fr")
+        self.germany = models.Country.objects.create(
+                name="Germany", url="www.parkrun.com.de")
+        self.uk_data = {"name": "UK", "url": "www.parkrun.org.uk"}
+        self.france_data = {"name": "France", "url": "www.parkrun.fr"}
+        self.germany_data = {
+            "name": "Germany", "url": "www.parkrun.com.de"}
+
+    def test_retrieve_country_returns_correct_object(self):
+        response = self.client.get("/countries/1/", format="json")
+        self.assertEqual(response.data, self.uk_data)
+
+    def test_retrieve_country_incorrect_url_gets_404(self):
+        response = self.client.get("/countries/4/")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_country_gets_403(self):
+        response = self.client.patch("/countries/1/", data={"name": "USA"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_country_gets_403(self):
+        response = self.client.delete("/countries/1/")
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_retrieve_country_list(self):
+        response = self.client.get("/countries/")
+        countries_data = [
+            self.uk_data, self.france_data, self.germany_data]
+        self.assertCountEqual(response.data, countries_data)
+
+    def test_post_to_country_list_gets_403(self):
+        response = self.client.post(
+            "/countries/",
+            data={"name": "USA", "url": "http://www.parkrun.us"}
+        )
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def tearDown(self):
+        pass
+
+
+class TestEventURLs(TestCase):
 
     def setUp(self):
         self.uk = models.Country.objects.create(
