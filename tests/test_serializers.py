@@ -59,7 +59,7 @@ class TestCountrySerializer(TestCase):
         pass
 
 
-class TestEvent(TestCase):
+class TestEventSerializer(TestCase):
 
     def setUp(self):
         self.uk = Country(name="UK", url="www.parkrun.org.uk")
